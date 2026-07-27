@@ -1,0 +1,27 @@
+plugins {
+    // Only the runnable module gets the boot plugin. The others stay libraries.
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    implementation project(':domain')
+
+    // Invisible at compile time, plugged in at runtime.
+    // Change this to implementation, import JdbcReservationRepository inside
+    // ReservationService and it compiles - which is exactly what we do not want.
+    runtimeOnly project(':db')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // STEP 2 - the shared builder.
+    testImplementation testFixtures(project(':domain'))
+
+    // STEP 3 - the H2 driver arrives through db's test fixtures.
+    // The article's minimal form is:
+    //     testRuntimeOnly testFixtures(project(':db'))
+    // We use testImplementation because we also compile against DatabaseCleaner.
+    testImplementation testFixtures(project(':db'))
+}
+
+// Note: 'bootRun' would need a real datasource. This project is about tests,
+// so only './gradlew test' is expected to work out of the box.
