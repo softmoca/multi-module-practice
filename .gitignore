@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Eclipse / VS Code
+bin/
+.settings/
+.classpath
+.project
+.vscode/
+
+# OS
+.DS_Store
