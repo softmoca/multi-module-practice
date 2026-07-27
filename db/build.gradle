@@ -1,0 +1,28 @@
+plugins {
+    // STEP 3: needed so this module can publish test-only artifacts
+    // AND test-only runtime dependencies (H2) to other modules.
+    id 'java-test-fixtures'
+}
+
+dependencies {
+    // implementation, not api: application must not see domain through db.
+    implementation project(':domain')
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // ---- the second problem of the article ----
+    // BEFORE: testRuntimeOnly 'com.h2database:h2'
+    //   db's own tests pass, but :application:test cannot find a driver,
+    //   because testRuntimeClasspath is never exposed to other modules.
+    // AFTER: testFixturesRuntimeOnly
+    //   db's own tests still pass (test sees testFixtures) and the
+    //   dependency can now be pulled in by whoever asks for our fixtures.
+    testFixturesRuntimeOnly 'com.h2database:h2'
+
+    // api, not implementation: DatabaseCleaner exposes JdbcTemplate in its
+    // signature, so consumers of our fixtures need that type too.
+    testFixturesApi 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // ---- the first problem of the article ----
+    // Reuse the builder that lives in domain/src/testFixtures.
+    testImplementation testFixtures(project(':domain'))
+}
