@@ -1,0 +1,12 @@
+plugins {
+    // STEP 1: comment this line out and run ':db:test'.
+    // ReservationFixtures becomes invisible outside this module.
+    id 'java-test-fixtures'
+}
+
+dependencies {
+    // Nothing. Not even Spring.
+    // The whole point of this module is that its classpath stays empty,
+    // so no JPA or HTTP type can ever leak into the domain model.
+    // (spring-boot-starter-test comes from the root build.gradle.)
+}
