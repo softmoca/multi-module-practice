@@ -1,0 +1,5 @@
+rootProject.name = 'multi-module-practice'
+
+include 'domain'
+include 'db'
+include 'application'
